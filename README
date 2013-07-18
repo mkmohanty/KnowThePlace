@@ -1,0 +1,5 @@
+KnowThePlace
+------------
+
+This is an example usage of HTML5 Geolocation API. In order to better represent the 
+location information the example also uses WebGL Earth JavaScript API [http://www.webglearth.org/api]. For the UI bootstrap.js [http://twitter.github.io/bootstrap/] has been used. This example got its inspiration from the geolocation example from w3schools [http://www.w3schools.com].

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>KnowThePlace</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	
+	<script src="http://www.webglearth.com/api.js"></script>
+	
+	<script src="js/jquery.js"></script>
+	
+	
+	<script>
+		var earth;
+		var rjob;
+		function initialize() {
+			var options = { zoom: 0.5, position: [0, 0] };
+			earth = new WebGLEarth('bgGlobe', options);
+			rjob = setInterval('var c = earth.getPosition(); earth.setPosition(c[0],c[1]+0.1);', 30);
+		}
+	
+	</script>
+	<style>
+		body {
+			background-color:#808080;
+		}
+		
+		#bgGlobe {
+			position: fixed;
+			z-index: 1;
+			width:100%;
+			height:100%;
+			border:5% solid gray;
+		}
+		
+		#inputModal {
+			position: fixed;
+			z-index: 2;
+			text-align: center;
+			background: transparent;
+		}
+		#desc {
+			position: relative;
+			z-index: 3;
+		}
+	</style>
+</head>
+<body onload="initialize()">
+
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/holder.js"></script>
+
+<script>
+function closeModal() {
+	$('#inputModal').hide();
+}
+function findMe() {
+	closeModal();
+	var describe = document.getElementById("desc");
+	if (!navigator.geolocation) {
+		describe.innerHTML = "<p>Geolocation is not supported by your browser</p>";
+		return;
+	}
+	
+	function geoEnabled(position) {
+		var latitude = position.coords.latitude;
+		var longitude = position.coords.longitude;
+		
+		describe.innerHTML = '<p>Latitude is ' + latitude + '° <br>Longitude is ' + longitude + '°</p>';
+		
+		clearInterval(rjob);
+		earth.setPosition(latitude,longitude,10.0);
+		marker = earth.initMarker();
+		marker.setPosition(latitude, longitude);
+	};
+	
+	function geoError() {
+		describe.innerHTML = "Unable to find your location";
+		};
+	
+	describe.innerHTML = "<p>Locating…</p>";
+	
+	navigator.geolocation.getCurrentPosition(geoEnabled, geoError);
+	}
+	</script>
+
+	<section id="bgGlobe"></section>
+	<div id="inputModal" class="modal" role="dialog" aria-hidden="true">
+		<div class="modal-header">
+			<h2>Hello There!</h2>
+		</div>
+		<div class="modal-body">
+			<h3><mark>Discover more about your location.</mark></h3><br>
+			<button id="startButton" class="btn btn-large btn-info" onclick="findMe()">Tell me about this place!</button>
+		</div>
+	
+	</div>
+	
+	<section id="desc" class="alert alert-info">
+	</section>
+	
+	
+</body>
+</html>
